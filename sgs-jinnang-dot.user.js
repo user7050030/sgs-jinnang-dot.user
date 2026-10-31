@@ -34,7 +34,8 @@
     const style = document.createElement('style');
     style.id = CSS_ID;
     style.textContent = `
-      /* 收起态只留一个圆点：面板皮肤和正面内容透明化，但保留原来的点击热区 */
+      /* 收起态只留一个圆点：面板皮肤/内容透明化，并把整块面板从命中测试里摘掉 */
+      #jnd-panel.jnd-mini-dot:not(.open) { pointer-events: none !important; }
       #jnd-panel.jnd-mini-dot:not(.open)::before { opacity: 0 !important; }
       #jnd-panel.jnd-mini-dot:not(.open) .jnd-face-front { opacity: 0 !important; }
       #jnd-panel.jnd-mini-dot:not(.open)::after { opacity: 0 !important; }
@@ -50,14 +51,15 @@
         box-shadow: 0 0 0 1px rgba(0, 0, 0, .34), 0 2px 8px rgba(0, 0, 0, .5), 0 0 10px rgba(214, 173, 78, .16);
         transition: border-color .16s ease, box-shadow .16s ease;
       }
-      #jnd-panel.jnd-mini-dot:not(.open) #jnd-mini-pips { display: flex; }
+      /* 命中区域只剩这 26px 圆点，点击冒泡回面板后仍走原来的展开逻辑 */
+      #jnd-panel.jnd-mini-dot:not(.open) #jnd-mini-pips { display: flex; pointer-events: auto; }
+      #jnd-mini-pips:hover {
+        border-color: rgba(238, 205, 128, .95);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, .34), 0 2px 8px rgba(0, 0, 0, .5), 0 0 14px rgba(230, 190, 100, .3);
+      }
       /* 锦囊袋允许拖到右侧停靠，停靠后可见区域在面板右上角 */
       #jnd-panel.jnd-mini-dot.jnd-dock-right:not(.open) #jnd-mini-pips {
         left: auto; right: calc(var(--jnd-entry-w, 200px) - 44px);
-      }
-      #jnd-panel.jnd-mini-dot:hover:not(.open) #jnd-mini-pips {
-        border-color: rgba(238, 205, 128, .95);
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, .34), 0 2px 8px rgba(0, 0, 0, .5), 0 0 14px rgba(230, 190, 100, .3);
       }
       #jnd-mini-pips i {
         width: 3px; height: 3px; border-radius: 50%;
